@@ -38,7 +38,9 @@ export default class Task extends Component {
                         color2 = '#FFF'
                         onClick = { this.complete }
                     />
-                    <code>{message}</code>
+                    <code>
+                        {message}
+                    </code>
                 </div>
                 <div>
                     <Star
