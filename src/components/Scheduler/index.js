@@ -48,13 +48,13 @@ export default class Scheduler extends Component {
     render () {
         const { todos } = this.state;
         const allCompleted = todos.every((todo) => todo.completed);
-        const todoList = todos.map(({ id, message, completed, important }) => (
+        const todoList = todos.map(({ id, message, completed, favorite }) => (
             <Task
                 changePriority = { this.changePriority }
                 complete = { this.complete }
                 completed = { completed }
+                favorite = { favorite }
                 id = { id }
-                important = { important }
                 key = { id }
                 message = { message }
             />
