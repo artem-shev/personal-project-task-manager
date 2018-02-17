@@ -38,7 +38,7 @@ export default class Scheduler extends Component {
 
     completeAll = () =>
         this.setState(({ todos }) => ({
-            todso: todos.map((todo) => {
+            todos: todos.map((todo) => {
                 todo.completed = true;
 
                 return todo;
