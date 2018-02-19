@@ -1,13 +1,40 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { object, array } from 'prop-types';
 
+import { todosActions } from 'actions';
+import { getTodos } from 'selectors';
 import Scheduler from 'components/Scheduler/Scheduler';
-import { store } from '../../store/app.store';
 
-export default function App() {
+function App(props) {
+  const {
+    todos,
+    actions: { addTodo, fetchTodos, deleteTodo },
+  } = props;
   return (
-    <Provider store={store}>
-      <Scheduler />
-    </Provider>
+    <Scheduler
+      todos={todos}
+      addTodo={addTodo}
+      fetchTodos={fetchTodos}
+      deleteTodo={deleteTodo}
+    />
   );
 }
+
+App.propTypes = {
+  todos: array.isRequired,
+  actions: object.isRequired,
+};
+
+const mapStateToProps = state => ({
+  todos: getTodos(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: {
+    ...bindActionCreators(todosActions, dispatch),
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

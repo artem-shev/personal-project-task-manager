@@ -20,13 +20,8 @@ env:
   es6: true
 
 rules:
-  indent: [
-  1,
-  2,
-  {
-    "SwitchCase": 1
-  }
-]
+  linebreak-style: 0
+  indent: [ 1, 2, { "SwitchCase": 1 }]
   class-methods-use-this: 0
 
   import/no-extraneous-dependencies: 0
@@ -34,14 +29,7 @@ rules:
   import/extensions: 0
   import/prefer-default-export: 0
 
-  react/jsx-filename-extension: [
-  1,
-  {
-    "extensions": [
-      ".js"
-    ]
-  }
-]
+  react/jsx-filename-extension: [1, { "extensions": [".js"] }]
   react/jsx-indent: 1
   react/forbid-prop-types: 0
   react/no-array-index-key: 0
