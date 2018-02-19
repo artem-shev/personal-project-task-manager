@@ -10,14 +10,24 @@ import Scheduler from 'components/Scheduler/Scheduler';
 function App(props) {
   const {
     todos,
-    actions: { addTodo, fetchTodos, deleteTodo },
+    actions: {
+      addTodo,
+      fetchTodos,
+      deleteTodo,
+      completeTodo,
+      toggleFavorite,
+      editTodo,
+    },
   } = props;
   return (
     <Scheduler
       todos={todos}
       addTodo={addTodo}
-      fetchTodos={fetchTodos}
+      completeTodo={completeTodo}
       deleteTodo={deleteTodo}
+      editTodo={editTodo}
+      fetchTodos={fetchTodos}
+      toggleFavorite={toggleFavorite}
     />
   );
 }

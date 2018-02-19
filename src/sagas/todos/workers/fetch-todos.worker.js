@@ -7,7 +7,7 @@ import { todosSchema } from 'schemas';
 import { api } from 'helpers';
 import { todosActions, uiActions } from 'actions';
 
-export function* fetchTodosWorker() {
+export function* fetchTodosWorker({ payload: params }) {
   try {
     yield put(uiActions.startTodosFetching());
     const response = yield call(
@@ -15,7 +15,15 @@ export function* fetchTodosWorker() {
       api,
     );
 
-    const { data: { data: todos } } = response;
+    let { data: { data: todos } } = response;
+    
+    if (params) {
+      if (params.searchQuery) {
+        const regexp = new RegExp(`^${params.searchQuery}`, 'i');
+        todos = todos.filter(({ message }) => regexp.test(message));
+      }
+    }
+    
     const normalizedTodos = normalize(todos, todosSchema);
     yield put(todosActions.fetchTodosSuccess(normalizedTodos));
   } catch (err) {
