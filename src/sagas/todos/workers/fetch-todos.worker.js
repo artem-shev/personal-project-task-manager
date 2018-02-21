@@ -16,14 +16,14 @@ export function* fetchTodosWorker({ payload: params }) {
     );
 
     let { data: { data: todos } } = response;
-    
+
     if (params) {
       if (params.searchQuery) {
         const regexp = new RegExp(`^${params.searchQuery}`, 'i');
         todos = todos.filter(({ message }) => regexp.test(message));
       }
     }
-    
+
     const normalizedTodos = normalize(todos, todosSchema);
     yield put(todosActions.fetchTodosSuccess(normalizedTodos));
   } catch (err) {

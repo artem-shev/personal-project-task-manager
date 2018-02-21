@@ -8,8 +8,6 @@ import { getTodos } from 'selectors';
 import { todosActions, uiActions } from 'actions';
 
 export function* editTodoWorker({ payload: { id, message } }) {
-  console.log('id', id);
-  console.log('message', message);
   try {
     yield put(uiActions.startTodosFetching());
 
@@ -17,7 +15,7 @@ export function* editTodoWorker({ payload: { id, message } }) {
     const todo = allTodos.find(t => t.id === id);
 
     todo.message = message;
-console.log('message', message);
+
     const response = yield call(
       axios.put,
       api,

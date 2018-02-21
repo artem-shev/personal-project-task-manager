@@ -53,7 +53,6 @@ export default class Scheduler extends Component {
   }
 
   completeAll() {
-    console.log('1', 1);
     const { completeTodo } = this.props;
     completeTodo();
   }
@@ -74,7 +73,7 @@ export default class Scheduler extends Component {
     } = this.props;
 
     const allCompleted = todos.every(todo => todo.completed);
-console.log('allCompleted', allCompleted);
+
     const sortedTodos = [
       ...todos.filter(todo => todo.favorite && !todo.completed),
       ...todos.filter(todo => !todo.favorite && !todo.completed),

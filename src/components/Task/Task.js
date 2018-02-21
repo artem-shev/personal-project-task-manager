@@ -117,7 +117,7 @@ export default class Task extends Component {
       <li className={styles}>
         <div>
           <Checkbox
-            checked={completed}
+            value={completed}
             color1="#3B8EF3"
             color2="#FFF"
             onClick={this.complete}
