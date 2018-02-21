@@ -37,7 +37,7 @@ export default class Task extends Component {
     isEditing: false,
     editedMessage: '',
   }
-  
+
   onInputChange({ target: { value: editedMessage } }) {
     if (editedMessage.length > 46) {
       toastr.error('Maxim available length of todo 46');
@@ -83,7 +83,7 @@ export default class Task extends Component {
 
     if (!editedMessage.length || editedMessage === message) { return; }
 
-    editTodo({ id, editedMessage });
+    editTodo({ id, message: editedMessage });
     this.setState({ isEditing: false });
   }
 

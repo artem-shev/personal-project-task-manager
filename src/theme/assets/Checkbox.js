@@ -6,12 +6,11 @@ import transform from './Svg';
 
 class Checkbox extends Component {
     render () {
-        const { checked, color1, color2 } = this.props;
-
-        const fill = checked ? color1 : color2;
+        const { color1, color2, value, onChange } = this.props;
+        const fill = value ? color1 : color2;
 
         return (
-            <g>
+            <g onClick={onChange}>
                 <rect
                     fill = { fill }
                     height = '25'

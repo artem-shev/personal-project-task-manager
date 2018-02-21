@@ -1,4 +1,5 @@
 import { call, put } from 'redux-saga/effects';
+import { actions as formActions } from 'react-redux-form';
 import axios from 'axios';
 import { normalize } from 'normalizr';
 
@@ -20,6 +21,7 @@ export function* addTodoWorker({ payload: message }) {
     const normalizedTodo = normalize(todo, todoSchema);
 
     yield put(todosActions.addTodoSuccess(normalizedTodo));
+    yield put(formActions.reset('forms.todo.message'));
   } catch (err) {
     yield put(todosActions.addTodoFail(err));
   } finally {

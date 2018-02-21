@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { func, array } from 'prop-types';
 import { toastr } from 'react-redux-toastr';
+import { Control, Form, Errors } from 'react-redux-form';
 
 // Instruments
 import Checkbox from 'theme/assets/Checkbox';
@@ -17,8 +18,10 @@ export default class Scheduler extends Component {
     fetchTodos: func.isRequired,
     deleteTodo: func.isRequired,
     completeTodo: func.isRequired,
+    editTodo: func.isRequired,
+    toggleFavorite: func.isRequired,
   };
-  
+
   constructor() {
     super();
 
@@ -28,28 +31,14 @@ export default class Scheduler extends Component {
     this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
-  state = {
-    todoMessage: '',
-    searchQuery: '',
-  };
-
   componentDidMount() {
     const { fetchTodos } = this.props;
     fetchTodos();
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
+  handleSubmit({ message }) {
     const { addTodo } = this.props;
-    const { todoMessage } = this.state;
-    
-    if (!todoMessage.length) {
-      toastr.error('You can\'t create an empty todo');
-      return;
-    }
-    
-    addTodo(todoMessage);
-    this.setState({ todoMessage: '' });
+    addTodo(message);
   }
 
   handleInputChange({ target: { value } }) {
@@ -57,29 +46,25 @@ export default class Scheduler extends Component {
       toastr.error('Maxim available length for todo is 46');
       return;
     }
-    
+
     this.setState(() => ({
       todoMessage: value,
     }));
   }
-  
+
   completeAll() {
+    console.log('1', 1);
     const { completeTodo } = this.props;
     completeTodo();
   }
-  
-  handleSearchChange({ target: { value: searchQuery } }) {
+
+  handleSearchChange(model, searchQuery) {
     const { fetchTodos } = this.props;
-    this.setState({ searchQuery });
-    
+
     fetchTodos({ searchQuery });
   }
-  
+
   render() {
-    const {
-      todoMessage,
-      searchQuery
-    } = this.state;
     const {
       todos,
       deleteTodo,
@@ -89,13 +74,13 @@ export default class Scheduler extends Component {
     } = this.props;
 
     const allCompleted = todos.every(todo => todo.completed);
-    
+console.log('allCompleted', allCompleted);
     const sortedTodos = [
       ...todos.filter(todo => todo.favorite && !todo.completed),
       ...todos.filter(todo => !todo.favorite && !todo.completed),
       ...todos.filter(todo => todo.completed),
     ];
-    
+
     const todoList = sortedTodos.map(({
       id, message, completed, favorite,
     }) => (
@@ -117,26 +102,45 @@ export default class Scheduler extends Component {
         <main>
           <header>
             <h1>Планировщик задач</h1>
-            <input placeholder="Поиск" type="search" onChange={this.handleSearchChange} value={searchQuery} />
+            <Control
+              model="forms.todo.searchQuery"
+              changeAction={this.handleSearchChange}
+            />
           </header>
           <section>
-            <form onSubmit={this.handleSubmit}>
-              <input
+            <Form onSubmit={this.handleSubmit} model="forms.todo">
+              <Control.text
+                model="forms.todo.message"
                 placeholder="Task description"
-                type="text"
-                onChange={this.handleInputChange}
-                value={todoMessage}
+                validateOn="change"
+                validators={{
+                  required: val => val && val.length,
+                  maxLength: val => val && val.length < 46,
+                }}
+              />
+              <Errors
+                model="forms.todo.message"
+                messages={{
+                  required: 'Please provide todo message',
+                  maxLength: 'Max length for todo is 46 chars',
+                }}
+                show={field => field.submitFailed}
               />
               <button>Добавить задачу</button>
-            </form>
+            </Form>
             <ul>{todoList}</ul>
           </section>
           <footer>
-            <Checkbox
-              checked={allCompleted}
-              color1="#363636"
-              color2="#fff"
-              onClick={this.completeAll}
+            <Control.checkbox
+              model="forms.todo.allCompleted"
+              id="forms.todo.allCompleted"
+              component={Checkbox}
+              controlProps={{
+                color1: '#363636',
+                color2: '#fff',
+                value: allCompleted,
+              }}
+              changeAction={this.completeAll}
             />
             <code>All tasks are completed</code>
           </footer>
