@@ -74,13 +74,7 @@ export default class Scheduler extends Component {
 
     const allCompleted = todos.every(todo => todo.completed);
 
-    const sortedTodos = [
-      ...todos.filter(todo => todo.favorite && !todo.completed),
-      ...todos.filter(todo => !todo.favorite && !todo.completed),
-      ...todos.filter(todo => todo.completed),
-    ];
-
-    const todoList = sortedTodos.map(({
+    const todoList = todos.map(({
       id, message, completed, favorite,
     }) => (
       <Task
@@ -100,32 +94,36 @@ export default class Scheduler extends Component {
       <section className={Styles.scheduler}>
         <main>
           <header>
-            <h1>Планировщик задач</h1>
+            <h1>Awesome React-Redux Todos</h1>
             <Control
               model="forms.todo.searchQuery"
               changeAction={this.handleSearchChange}
+              placeholder="Search todo"
             />
           </header>
           <section>
             <Form onSubmit={this.handleSubmit} model="forms.todo">
-              <Control.text
-                model="forms.todo.message"
-                placeholder="Task description"
-                validateOn="change"
-                validators={{
-                  required: val => val && val.length,
-                  maxLength: val => val && val.length < 46,
-                }}
-              />
-              <Errors
-                model="forms.todo.message"
-                messages={{
-                  required: 'Please provide todo message',
-                  maxLength: 'Max length for todo is 46 chars',
-                }}
-                show={field => field.submitFailed}
-              />
-              <button>Добавить задачу</button>
+              <section>
+                <Control.text
+                  model="forms.todo.message"
+                  placeholder="Task description"
+                  validateOn="change"
+                  validators={{
+                    required: val => val && val.trim().length,
+                    maxLength: val => !val || (val && val.length < 46),
+                  }}
+                />
+                <Errors
+                  className={Styles.error}
+                  model="forms.todo.message"
+                  messages={{
+                    required: 'Can\'t save empty todo',
+                    maxLength: 'Max length for todo is 46 chars',
+                  }}
+                  show={field => field.submitFailed}
+                />
+              </section>
+              <button>Add todo</button>
             </Form>
             <ul>{todoList}</ul>
           </section>
