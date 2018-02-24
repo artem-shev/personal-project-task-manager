@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 
@@ -26,7 +27,10 @@ export const getTodos = createSelector(
         return curr.favorite ? -1 : 1;
       }
 
-      return curr.created > next.created ? -1 : 1;
+      const currDate = moment(curr.modified || curr.created);
+      const nextDate = moment(next.modified || next.created);
+
+      return currDate.isBefore(nextDate) ? 1 : -1;
     });
 
     return sortedTodos;
