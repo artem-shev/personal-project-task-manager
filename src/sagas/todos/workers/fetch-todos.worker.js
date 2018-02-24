@@ -10,19 +10,20 @@ import { todosActions, uiActions } from 'actions';
 export function* fetchTodosWorker({ payload: params }) {
   try {
     yield put(uiActions.startTodosFetching());
-    const response = yield call(
-      axios.get,
-      api,
-    );
-
-    let { data: { data: todos } } = response;
+    let query = '';
 
     if (params) {
       if (params.searchQuery) {
-        const regexp = new RegExp(`^${params.searchQuery}`, 'i');
-        todos = todos.filter(({ message }) => regexp.test(message));
+        query += `search=${params.searchQuery}`;
       }
     }
+
+    const response = yield call(
+      axios.get,
+      `${api}?${query}`,
+    );
+
+    const { data: { data: todos } } = response;
 
     const normalizedTodos = normalize(todos, todosSchema);
     yield put(todosActions.fetchTodosSuccess(normalizedTodos));

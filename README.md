@@ -6,3 +6,5 @@
 + `cd personal-project-task-manager`
 + `yarn` or `npm i`
 + `yarn start` or `npm start`
+
+[demo](https://artem-shev.github.io/personal-project-task-manager/)
